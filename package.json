@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "example": "parcel example/index.html -d docs",
+    "example": "parcel example/index.html -d docs --public-url /pixelated-canvas/",
     "develop": "concurrently \"npm:build:watch\" \"npm:example\"",
     "deploy": "gh-pages -d docs",
     "test": "jest --watchAll"
