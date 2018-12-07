@@ -1,0 +1,10 @@
+node_modules
+yarn.lock
+src
+rollup.config.js
+tsconfig.json
+yarn-error.log
+data
+example
+.cache
+.travis.yml
