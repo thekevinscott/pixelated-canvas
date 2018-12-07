@@ -1,4 +1,4 @@
-import Color from 'color';
+import * as Color from 'color';
 
 const makeElement = (type: string = 'div', opts = {}) => {
   const el = document.createElement(type);
