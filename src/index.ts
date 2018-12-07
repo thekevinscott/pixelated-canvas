@@ -1,5 +1,12 @@
 import Color from 'color';
-import makeElement from './makeElement';
+
+const makeElement = (type: string = 'div', opts = {}) => {
+  const el = document.createElement(type);
+  Object.keys(opts).forEach(key => {
+    el[key] = opts[key];
+  });
+  return el;
+};
 
 const BACKGROUND_COLORS: Color[] = [
   Color.rgb(235,235,235),

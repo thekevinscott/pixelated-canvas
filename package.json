@@ -1,13 +1,11 @@
 {
   "name": "pixelated-canvas",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "repository": "https://github.com/thekevinscott/pixelated-canvas",
   "main": "dist/index.js",
   "scripts": {
-    "prepublish": "yarn build",
-    "build": "rollup -c rollup.config.js",
-    "develop": "rollup -c rollup.config.js -w",
+    "build": "tsc",
     "test": "jest --watchAll"
   },
   "author": "Kevin Scott <kevin@hitheory.com>",
@@ -31,6 +29,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
+    "@types/color": "^3.0.0",
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.10",
     "awesome-typescript-loader": "^5.2.1",
@@ -42,7 +41,6 @@
     "rollup-plugin-typescript": "^1.0.0",
     "ts-jest": "^23.10.5",
     "tslib": "^1.9.3",
-    "@types/color": "^3.0.0",
     "typescript": "^3.2.1"
   },
   "dependencies": {
