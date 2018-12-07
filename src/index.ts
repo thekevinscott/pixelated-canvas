@@ -28,6 +28,9 @@ class Canvas {
   private pixels: string[];
   private pixelW:number;
   private pixelH:number;
+  private callbacks: {
+    [index: string]: Function;
+  } = {};
   // private lastE:MouseEvent;
 
   constructor() {
@@ -48,9 +51,9 @@ class Canvas {
     }
     this.ctx = ctx;
 
-    this.canvas.onmousedown = this.onMouseDown;
-    window.onmouseup = this.onMouseUp;
-    this.canvas.onmousemove = this.onMouseMove;
+    this.canvas.onmousedown = this._onMouseDown;
+    window.onmouseup = this._onMouseUp;
+    this.canvas.onmousemove = this._onMouseMove;
     this.drawBackground();
   }
 
@@ -66,6 +69,10 @@ class Canvas {
       }
     }
   }
+
+  onMouseDown = (callback: Function) => this.callbacks.onMouseDown = callback;
+  onMouseUp = (callback: Function) => this.callbacks.onMouseUp = callback;
+  onMouseMove = (callback: Function) => this.callbacks.onMouseMove = callback;
 
   getCanvasData = () => this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
@@ -106,22 +113,31 @@ class Canvas {
 
   updateCanvasData = (data: ImageData) => this.ctx.putImageData(data, 0, 0, 0, 0, this.canvas.width, this.canvas.height);
 
-  onMouseDown = (e: MouseEvent) => {
+  _onMouseDown = (e: MouseEvent) => {
     this.mouseIsDown = true;
     // this.lastE = e;
     this.drawPixel(e.x, e.y);
+    if (this.callbacks.onMouseDown) {
+      this.callbacks.onMouseDown(e);
+    }
   }
 
-  onMouseUp = () => {
+  _onMouseUp = (e: MouseEvent) => {
     this.mouseIsDown = false;
+    if (this.callbacks.onMouseUp) {
+      this.callbacks.onMouseUp(e);
+    }
   }
 
-  onMouseMove = (e: MouseEvent) => {
+  _onMouseMove = (e: MouseEvent) => {
     if (this.ctx && this.mouseIsDown) {
       // this.lastE = e;
       // console.log('lasts and current');
       // console.log(this.lastE.x, this.lastE.y, e.x, e.y);
       this.drawPixel(e.x, e.y);
+      if (this.callbacks.onMouseMove) {
+        this.callbacks.onMouseMove(e);
+      }
     }
   }
 
