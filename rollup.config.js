@@ -7,6 +7,8 @@ export default {
     format: 'esm',
   },
   plugins: [
-    typescript(),
+    typescript({
+      typescript: require('typescript'),
+    }),
   ],
 }

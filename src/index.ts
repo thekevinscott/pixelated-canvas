@@ -1,4 +1,3 @@
-import { css } from 'emotion';
 import Color from 'color';
 import makeElement from './makeElement';
 
@@ -25,10 +24,7 @@ class Canvas {
   // private lastE:MouseEvent;
 
   constructor() {
-    this.canvas = makeElement('canvas', css`
-      border: 1px solid black;
-      cursor: pointer;
-    `, {
+    this.canvas = makeElement('canvas', {
       height: 560,
       width: 560,
     }) as HTMLCanvasElement;
