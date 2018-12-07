@@ -21,6 +21,11 @@ interface IProps {
   height?: number;
 }
 
+interface IPoint {
+  x: number;
+  y: number;
+}
+
 class Canvas {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -93,7 +98,7 @@ class Canvas {
 
   getCanvasData = () => this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
-  drawPixel = (x: number, y: number, color:Color = PAINT_COLOR) => {
+  drawPixel = ({ x, y }: IPoint, color:Color = PAINT_COLOR) => {
     x -= 10;
     y -= 10;
     if (x > this.canvas.width || y > this.canvas.height || x < 0 || y < 0) {
@@ -130,10 +135,18 @@ class Canvas {
 
   updateCanvasData = (data: ImageData) => this.ctx.putImageData(data, 0, 0, 0, 0, this.canvas.width, this.canvas.height);
 
+  getPosition = (e: MouseEvent): IPoint => {
+    const rect = this.canvas.getBoundingClientRect();
+    return {
+      x: e.x - rect.left,
+      y: e.y - rect.top,
+    };
+  }
+
   _onMouseDown = (e: MouseEvent) => {
     this.mouseIsDown = true;
     // this.lastE = e;
-    this.drawPixel(e.x, e.y);
+    this.drawPixel(this.getPosition(e));
     if (this.callbacks.onMouseDown) {
       this.callbacks.onMouseDown(e);
     }
@@ -151,7 +164,7 @@ class Canvas {
       // this.lastE = e;
       // console.log('lasts and current');
       // console.log(this.lastE.x, this.lastE.y, e.x, e.y);
-      this.drawPixel(e.x, e.y);
+      this.drawPixel(this.getPosition(e));
       if (this.callbacks.onMouseMove) {
         this.callbacks.onMouseMove(e);
       }
