@@ -9,15 +9,17 @@ const makeElement = (type: string = 'div', opts = {}) => {
 };
 
 const BACKGROUND_COLORS: Color[] = [
-  Color.rgb(235,235,235),
-  Color.rgb(255,255,255),
+  Color.rgb(...Array(3).fill(35)),
+  Color.rgb(...Array(3).fill(0)),
 ];
-const PAINT_COLOR: Color = Color.rgb(0,0,0);
-// const BACKGROUND_COLORS = [
-//   `rgb(${Array(3).fill(35).join(',')})`,
-//   `rgb(${Array(3).fill(0).join(',')})`,
-// ];
-// const PAINT_COLOR = `rgb(${Array(3).fill(255).join(',')})`;
+const PAINT_COLOR: Color = Color.rgb(...Array(3).fill(255));
+
+interface IProps {
+  rows?: number;
+  cols?: number;
+  width?: number;
+  height?: number;
+}
 
 class Canvas {
   private canvas: HTMLCanvasElement;
@@ -28,15 +30,30 @@ class Canvas {
   private pixels: string[];
   private pixelW:number;
   private pixelH:number;
+  private width: number = 560;
+  private height: number = 560;
   private callbacks: {
     [index: string]: Function;
   } = {};
   // private lastE:MouseEvent;
 
-  constructor() {
+  constructor(props: IProps = {}) {
+    if (props.rows) {
+      this.backgroundRows = props.rows;
+    }
+    if (props.cols) {
+      this.backgroundCols = props.cols;
+    }
+    if (props.width) {
+      this.width = props.width;
+    }
+    if (props.height) {
+      this.height = props.height;
+    }
+
     this.canvas = makeElement('canvas', {
-      height: 560,
-      width: 560,
+      height: this.height,
+      width: this.width,
     }) as HTMLCanvasElement;
 
     this.pixelW = this.canvas.width / this.backgroundRows;
