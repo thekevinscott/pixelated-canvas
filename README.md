@@ -6,7 +6,7 @@ A canvas that lets you draw in a pixelated, 8-bit style.
 
 ## Demo
 
-[See a live demo](https://thekevinscott.github.io).
+[See a live demo](https://thekevinscott.github.io/pixelated-canvas/).
 
 ## Quickstart
 
