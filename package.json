@@ -1,14 +1,15 @@
 {
   "name": "pixelated-canvas",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "",
   "repository": "https://github.com/thekevinscott/pixelated-canvas",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "example": "parcel example/index.html",
+    "example": "parcel example/index.html -d docs",
     "develop": "concurrently \"npm:build:watch\" \"npm:example\"",
+    "deploy": "gh-pages -d docs",
     "test": "jest --watchAll"
   },
   "author": "Kevin Scott <kevin@hitheory.com>",
@@ -40,6 +41,7 @@
     "babel-loader": "^8.0.4",
     "babel-runtime": "^6.26.0",
     "concurrently": "^4.1.0",
+    "gh-pages": "^2.0.1",
     "jest": "^23.6.0",
     "parcel": "^1.10.3",
     "rollup": "^0.67.4",
@@ -49,7 +51,6 @@
     "typescript": "^3.2.1"
   },
   "dependencies": {
-    "color": "^3.1.0",
-    "pixelated-canvas": "^0.3.0"
+    "color": "^3.1.0"
   }
 }

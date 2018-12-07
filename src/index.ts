@@ -178,6 +178,11 @@ class Canvas {
   render(target: HTMLElement) {
     target.appendChild(this.canvas);
   }
+
+  reset = () => {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.drawBackground();
+  }
 }
 
 export default Canvas;

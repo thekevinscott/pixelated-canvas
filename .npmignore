@@ -9,3 +9,5 @@ example
 .cache
 .travis.yml
 build
+docs
+example

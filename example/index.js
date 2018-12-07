@@ -12,10 +12,6 @@ document.getElementById('reset').onclick = () => {
   canvas.reset();
 }
 
-document.getElementById('brush').onchange = (e) => {
-  canvas.setBrushSize(e.target.value);
-}
-
 let moving = false;
 document.getElementById('pixel').onmousedown = () => moving = true;
 document.getElementById('pixel').onmouseup = () => moving = false;
