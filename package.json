@@ -6,6 +6,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:watch": "tsc -w",
+    "example": "parcel example/index.html",
+    "develop": "concurrently \"npm:build:watch\" \"npm:example\"",
     "test": "jest --watchAll"
   },
   "author": "Kevin Scott <kevin@hitheory.com>",
@@ -36,7 +39,9 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.4",
     "babel-runtime": "^6.26.0",
+    "concurrently": "^4.1.0",
     "jest": "^23.6.0",
+    "parcel": "^1.10.3",
     "rollup": "^0.67.4",
     "rollup-plugin-typescript": "^1.0.0",
     "ts-jest": "^23.10.5",
@@ -44,6 +49,7 @@
     "typescript": "^3.2.1"
   },
   "dependencies": {
-    "color": "^3.1.0"
+    "color": "^3.1.0",
+    "pixelated-canvas": "^0.3.0"
   }
 }
