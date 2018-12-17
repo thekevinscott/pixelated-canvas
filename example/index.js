@@ -1,11 +1,17 @@
 import Canvas from '../src';
 
+const pixels = 20;
+const pixelSize = 30;
+const size = pixelSize * pixels;
+
 const canvas = new Canvas({
-  xPixels: 28,
-  yPixels: 28,
-  width: 400,
-  height: 400,
+  width: size,
+  height: size,
+  xPixels: pixels,
+  yPixels: pixels,
 });
+
+console.log(canvas.getPixels());
 
 const container = document.getElementById('canvas');
 while (container.firstChild) {

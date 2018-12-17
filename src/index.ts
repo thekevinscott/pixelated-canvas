@@ -30,10 +30,8 @@ class Canvas {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private mouseIsDown: boolean = false;
-  private backgroundRows: number;
-  private backgroundCols: number;
-  private xPixelSize: number = 20;
-  private yPixelSize: number = 20;
+  private xPixels: number = 10;
+  private yPixels: number = 10;
   private pixels: string[];
   private width: number = 560;
   private height: number = 560;
@@ -50,10 +48,10 @@ class Canvas {
       this.height = props.height;
     }
     if (props.xPixels) {
-      this.xPixelSize = Math.floor(this.width / props.xPixels);
+      this.xPixels = props.xPixels;
     }
     if (props.yPixels) {
-      this.yPixelSize = Math.floor(this.height / props.yPixels);
+      this.yPixels = props.yPixels;
     }
 
     this.canvas = makeElement('canvas', {
@@ -61,10 +59,7 @@ class Canvas {
       width: this.width,
     }) as HTMLCanvasElement;
 
-    this.backgroundRows = this.canvas.height / this.yPixelSize;
-    this.backgroundCols = this.canvas.width / this.xPixelSize;
-
-    this.pixels = Array(this.xPixelSize * this.yPixelSize).fill('rgba(0,0,0,0');
+    this.pixels = Array(this.xPixels * this.yPixels).fill('rgba(0,0,0,0');
 
     const ctx = this.canvas.getContext('2d');
 
@@ -80,13 +75,13 @@ class Canvas {
   }
 
   drawBackground = () => {
-    for (let row = 0; row < this.backgroundRows; row++) {
-      for (let col = 0; col < this.backgroundCols; col++) {
+    for (let row = 0; row < this.yPixels; row++) {
+      for (let col = 0; col < this.xPixels; col++) {
         const color = BACKGROUND_COLORS[(col + row + 1) % 2];
         this.drawRect(
           color,
-          col * this.xPixelSize,
-          row * this.yPixelSize,
+          col,
+          row,
         );
       }
     }
@@ -105,9 +100,11 @@ class Canvas {
       return;
     }
 
+    const xPixelSize = this.width / this.xPixels;
+    const yPixelSize = this.height / this.yPixels;
     // convert e event to pixelated pixels
-    x = Math.floor(x / this.xPixelSize);
-    y = Math.floor(y / this.yPixelSize);
+    x = Math.floor(x / xPixelSize);
+    y = Math.floor(y / yPixelSize);
 
     for (let col = x - 1; col <= x + 1; col++) {
       for (let row = y - 1; row <= y + 1; row++) {
@@ -121,16 +118,16 @@ class Canvas {
         }
 
         this.pixels[(row * this.canvas.width) + col] = pixelColor.toString();
-        this.drawRect(pixelColor, col * this.xPixelSize, row * this.yPixelSize);
+        this.drawRect(pixelColor, col, row);
       }
     }
   }
 
   getPixels = () => this.pixels;
 
-  drawRect = (color: Color, x: number, y: number, width: number = this.xPixelSize, height: number = this.yPixelSize) => {
+  drawRect = (color: Color, x: number, y: number, width: number = this.width / this.xPixels, height: number = this.height / this.yPixels) => {
     this.ctx.fillStyle = color.toString();
-    this.ctx.fillRect(x, y, width, height)
+    this.ctx.fillRect(x * width, y * height, width, height)
   }
 
   updateCanvasData = (data: ImageData) => this.ctx.putImageData(data, 0, 0, 0, 0, this.canvas.width, this.canvas.height);
@@ -171,12 +168,10 @@ class Canvas {
     }
   }
 
-  setPixelSize = (xPixelSize: number, yPixelSize: number) => {
-    if (xPixelSize !== this.xPixelSize || yPixelSize !== this.yPixelSize) {
-      this.xPixelSize = xPixelSize;
-      this.yPixelSize = yPixelSize;
-      this.backgroundCols = this.canvas.width / this.yPixelSize;
-      this.backgroundRows = this.canvas.height / this.xPixelSize;
+  setPixelSize = (xPixels: number, yPixels: number) => {
+    if (this.xPixels !== xPixels || this.yPixels !== yPixels) {
+      this.xPixels = xPixels;
+      this.yPixels = yPixels;
       this.drawBackground();
     }
   };
