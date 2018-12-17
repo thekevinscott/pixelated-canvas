@@ -22,20 +22,22 @@ The following props are supported:
 
 * `width`
 * `height`
-* `pixelSize`
+* `xPixels`
+* `yPixels`
 
 ```
 const canvas = new Canvas({
   width: 500,
   height: 500,
-  pixelSize: 20,
+  xPixels: 20,
+  yPixels: 10,
 });
 ```
 
 `pixelSize` can also be set after instantiation with:
 
 ```
-canvas.setPixelSize(20);
+canvas.setPixelSize(20, 20);
 ```
 
 The following callbacks are supported:

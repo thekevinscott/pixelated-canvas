@@ -17,7 +17,8 @@ const PAINT_COLOR: Color = Color.rgb(...Array(3).fill(255));
 interface IProps {
   width?: number;
   height?: number;
-  pixelSize?: number;
+  xPixels?: number;
+  yPixels?: number;
 }
 
 interface IPoint {
@@ -31,7 +32,8 @@ class Canvas {
   private mouseIsDown: boolean = false;
   private backgroundRows: number;
   private backgroundCols: number;
-  private pixelSize: number = 20;
+  private xPixelSize: number = 20;
+  private yPixelSize: number = 20;
   private pixels: string[];
   private width: number = 560;
   private height: number = 560;
@@ -47,8 +49,11 @@ class Canvas {
     if (props.height) {
       this.height = props.height;
     }
-    if (props.pixelSize) {
-      this.pixelSize = props.pixelSize;
+    if (props.xPixels) {
+      this.xPixelSize = Math.floor(this.width / props.xPixels);
+    }
+    if (props.yPixels) {
+      this.yPixelSize = Math.floor(this.height / props.yPixels);
     }
 
     this.canvas = makeElement('canvas', {
@@ -56,10 +61,10 @@ class Canvas {
       width: this.width,
     }) as HTMLCanvasElement;
 
-    this.backgroundRows = this.canvas.height / this.pixelSize;
-    this.backgroundCols = this.canvas.width / this.pixelSize;
+    this.backgroundRows = this.canvas.height / this.yPixelSize;
+    this.backgroundCols = this.canvas.width / this.xPixelSize;
 
-    this.pixels = Array(this.pixelSize * this.pixelSize).fill('rgba(0,0,0,0');
+    this.pixels = Array(this.xPixelSize * this.yPixelSize).fill('rgba(0,0,0,0');
 
     const ctx = this.canvas.getContext('2d');
 
@@ -80,8 +85,8 @@ class Canvas {
         const color = BACKGROUND_COLORS[(col + row + 1) % 2];
         this.drawRect(
           color,
-          col * this.pixelSize,
-          row * this.pixelSize,
+          col * this.xPixelSize,
+          row * this.yPixelSize,
         );
       }
     }
@@ -101,8 +106,8 @@ class Canvas {
     }
 
     // convert e event to pixelated pixels
-    x = Math.floor(x / this.pixelSize);
-    y = Math.floor(y / this.pixelSize);
+    x = Math.floor(x / this.xPixelSize);
+    y = Math.floor(y / this.yPixelSize);
 
     for (let col = x - 1; col <= x + 1; col++) {
       for (let row = y - 1; row <= y + 1; row++) {
@@ -116,14 +121,14 @@ class Canvas {
         }
 
         this.pixels[(row * this.canvas.width) + col] = pixelColor.toString();
-        this.drawRect(pixelColor, col * this.pixelSize, row * this.pixelSize);
+        this.drawRect(pixelColor, col * this.xPixelSize, row * this.yPixelSize);
       }
     }
   }
 
   getPixels = () => this.pixels;
 
-  drawRect = (color: Color, x: number, y: number, width: number = this.pixelSize, height: number = this.pixelSize) => {
+  drawRect = (color: Color, x: number, y: number, width: number = this.xPixelSize, height: number = this.yPixelSize) => {
     this.ctx.fillStyle = color.toString();
     this.ctx.fillRect(x, y, width, height)
   }
@@ -166,11 +171,12 @@ class Canvas {
     }
   }
 
-  setPixelSize = (pixelSize: number) => {
-    if (pixelSize !== this.pixelSize) {
-      this.pixelSize = pixelSize;
-      this.backgroundCols = this.canvas.width / this.pixelSize;
-      this.backgroundRows = this.canvas.height / this.pixelSize;
+  setPixelSize = (xPixelSize: number, yPixelSize: number) => {
+    if (xPixelSize !== this.xPixelSize || yPixelSize !== this.yPixelSize) {
+      this.xPixelSize = xPixelSize;
+      this.yPixelSize = yPixelSize;
+      this.backgroundCols = this.canvas.width / this.yPixelSize;
+      this.backgroundRows = this.canvas.height / this.xPixelSize;
       this.drawBackground();
     }
   };
