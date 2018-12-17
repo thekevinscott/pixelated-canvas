@@ -2270,7 +2270,8 @@ function () {
     var _this = this;
 
     this.mouseIsDown = false;
-    this.pixelSize = 20;
+    this.xPixelSize = 20;
+    this.yPixelSize = 20;
     this.width = 560;
     this.height = 560;
     this.callbacks = {};
@@ -2280,7 +2281,7 @@ function () {
         for (var col = 0; col < _this.backgroundCols; col++) {
           var color = BACKGROUND_COLORS[(col + row + 1) % 2];
 
-          _this.drawRect(color, col * _this.pixelSize, row * _this.pixelSize);
+          _this.drawRect(color, col * _this.xPixelSize, row * _this.yPixelSize);
         }
       }
     };
@@ -2317,8 +2318,8 @@ function () {
       } // convert e event to pixelated pixels
 
 
-      x = Math.floor(x / _this.pixelSize);
-      y = Math.floor(y / _this.pixelSize);
+      x = Math.floor(x / _this.xPixelSize);
+      y = Math.floor(y / _this.yPixelSize);
 
       for (var col = x - 1; col <= x + 1; col++) {
         for (var row = y - 1; row <= y + 1; row++) {
@@ -2334,7 +2335,7 @@ function () {
 
           _this.pixels[row * _this.canvas.width + col] = pixelColor.toString();
 
-          _this.drawRect(pixelColor, col * _this.pixelSize, row * _this.pixelSize);
+          _this.drawRect(pixelColor, col * _this.xPixelSize, row * _this.yPixelSize);
         }
       }
     };
@@ -2345,11 +2346,11 @@ function () {
 
     this.drawRect = function (color, x, y, width, height) {
       if (width === void 0) {
-        width = _this.pixelSize;
+        width = _this.xPixelSize;
       }
 
       if (height === void 0) {
-        height = _this.pixelSize;
+        height = _this.yPixelSize;
       }
 
       _this.ctx.fillStyle = color.toString();
@@ -2401,11 +2402,12 @@ function () {
       }
     };
 
-    this.setPixelSize = function (pixelSize) {
-      if (pixelSize !== _this.pixelSize) {
-        _this.pixelSize = pixelSize;
-        _this.backgroundCols = _this.canvas.width / _this.pixelSize;
-        _this.backgroundRows = _this.canvas.height / _this.pixelSize;
+    this.setPixelSize = function (xPixelSize, yPixelSize) {
+      if (xPixelSize !== _this.xPixelSize || yPixelSize !== _this.yPixelSize) {
+        _this.xPixelSize = xPixelSize;
+        _this.yPixelSize = yPixelSize;
+        _this.backgroundCols = _this.canvas.width / _this.yPixelSize;
+        _this.backgroundRows = _this.canvas.height / _this.xPixelSize;
 
         _this.drawBackground();
       }
@@ -2425,17 +2427,21 @@ function () {
       this.height = props.height;
     }
 
-    if (props.pixelSize) {
-      this.pixelSize = props.pixelSize;
+    if (props.xPixels) {
+      this.xPixelSize = Math.floor(this.width / props.xPixels);
+    }
+
+    if (props.yPixels) {
+      this.yPixelSize = Math.floor(this.height / props.yPixels);
     }
 
     this.canvas = makeElement('canvas', {
       height: this.height,
       width: this.width
     });
-    this.backgroundRows = this.canvas.height / this.pixelSize;
-    this.backgroundCols = this.canvas.width / this.pixelSize;
-    this.pixels = Array(this.pixelSize * this.pixelSize).fill('rgba(0,0,0,0');
+    this.backgroundRows = this.canvas.height / this.yPixelSize;
+    this.backgroundCols = this.canvas.width / this.xPixelSize;
+    this.pixels = Array(this.xPixelSize * this.yPixelSize).fill('rgba(0,0,0,0');
     var ctx = this.canvas.getContext('2d');
 
     if (ctx === null) {
@@ -2464,8 +2470,12 @@ var _src = _interopRequireDefault(require("../src"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log('canvas', canvas);
-var canvas = new _src.default();
+var canvas = new _src.default({
+  xPixels: 28,
+  yPixels: 28,
+  width: 400,
+  height: 400
+});
 var container = document.getElementById('canvas');
 
 while (container.firstChild) {
@@ -2493,7 +2503,7 @@ document.getElementById('pixel').onmousemove = function (e) {
     return;
   }
 
-  canvas.setPixelSize(e.target.value);
+  canvas.setPixelSize(e.target.value, e.target.value);
 };
 
 document.getElementById('pixel').onclick = function (e) {
@@ -2526,7 +2536,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56121" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65319" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
