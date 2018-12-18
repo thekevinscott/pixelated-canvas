@@ -32,7 +32,7 @@ class Canvas {
   private mouseIsDown: boolean = false;
   private xPixels: number = 10;
   private yPixels: number = 10;
-  private pixels: string[];
+  private pixels: number[];
   private width: number = 560;
   private height: number = 560;
   private callbacks: {
