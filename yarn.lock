@@ -5278,13 +5278,6 @@ pinkie@^2.0.0:
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
-pixelated-canvas@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/pixelated-canvas/-/pixelated-canvas-0.3.0.tgz#e7462ba2e68d0b5b834728efa14f092472cbd191"
-  integrity sha512-WrR9F/uCzcs6Wj2uvNz5nlMhdOzjGeZRuYDUfkoPcV4zCSs7I+EKqpqyiHC74UHgSYEec/OQDlHlcMm7kr2ARg==
-  dependencies:
-    color "^3.1.0"
-
 pkg-dir@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-2.0.0.tgz#f6d5d1109e19d63edf428e0bd57e12777615334b"

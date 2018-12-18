@@ -2255,8 +2255,8 @@ var makeElement = function makeElement(type, opts) {
   return el;
 };
 
-var BACKGROUND_COLORS = [Color.rgb.apply(Color, Array(3).fill(35)), Color.rgb.apply(Color, Array(3).fill(0))];
-var PAINT_COLOR = Color.rgb.apply(Color, Array(3).fill(255));
+var BACKGROUND_COLORS = [35, 0];
+var PAINT_COLOR = 255;
 
 var Canvas =
 /** @class */
@@ -2323,27 +2323,39 @@ function () {
       x = Math.floor(x / xPixelSize);
       y = Math.floor(y / yPixelSize);
 
-      for (var col = x - 1; col <= x + 1; col++) {
-        for (var row = y - 1; row <= y + 1; row++) {
-          var pixelColor = void 0;
+      for (var row = y - 1; row <= y + 1; row++) {
+        for (var col = x - 1; col <= x + 1; col++) {
+          if (col >= 0 && row >= 0 && col < _this.xPixels && row < _this.yPixels) {
+            var index = row * _this.xPixels + col;
+            var pixelColor = _this.pixels[index];
 
-          if (row === y && col === x) {
-            pixelColor = color;
-          } else if (row === y || col === x) {
-            pixelColor = color.fade(0.5);
-          } else {
-            pixelColor = color.fade(0.8);
+            if (row === y && col === x) {
+              pixelColor += color;
+            } else if (row === y || col === x) {
+              pixelColor += color * 0.2;
+            } else {
+              pixelColor += color * 0.1;
+            }
+
+            if (pixelColor > 255) {
+              pixelColor = 255;
+            } else if (pixelColor < 0) {
+              pixelColor = 0;
+            }
+
+            _this.pixels[index] = pixelColor;
+
+            _this.drawRect(pixelColor, col, row);
           }
-
-          _this.pixels[row * _this.canvas.width + col] = pixelColor.toString();
-
-          _this.drawRect(pixelColor, col, row);
         }
       }
     };
 
     this.getPixels = function () {
-      return _this.pixels;
+      return _this.pixels.map(function (pixel) {
+        var c = Color.rgb(pixel);
+        return c.red() * c.alpha();
+      });
     };
 
     this.drawRect = function (color, x, y, width, height) {
@@ -2355,7 +2367,7 @@ function () {
         height = _this.height / _this.yPixels;
       }
 
-      _this.ctx.fillStyle = color.toString();
+      _this.ctx.fillStyle = "rgba(" + color + ", " + color + ", " + color + ", 1)";
 
       _this.ctx.fillRect(x * width, y * height, width, height);
     };
@@ -2439,7 +2451,7 @@ function () {
       height: this.height,
       width: this.width
     });
-    this.pixels = Array(this.xPixels * this.yPixels).fill('rgba(0,0,0,0');
+    this.pixels = Array(this.xPixels * this.yPixels).fill(0);
     var ctx = this.canvas.getContext('2d');
 
     if (ctx === null) {
@@ -2468,8 +2480,8 @@ var _src = _interopRequireDefault(require("../src"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var pixels = 20;
-var pixelSize = 30;
+var pixels = 25;
+var pixelSize = 20;
 var size = pixelSize * pixels;
 var canvas = new _src.default({
   width: size,
@@ -2477,7 +2489,9 @@ var canvas = new _src.default({
   xPixels: pixels,
   yPixels: pixels
 });
-console.log(canvas.getPixels());
+setInterval(function () {
+  console.log(canvas.getPixels());
+}, 2000);
 var container = document.getElementById('canvas');
 
 while (container.firstChild) {
@@ -2538,7 +2552,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51659" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56443" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

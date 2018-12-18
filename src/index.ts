@@ -8,11 +8,11 @@ const makeElement = (type: string = 'div', opts = {}) => {
   return el;
 };
 
-const BACKGROUND_COLORS: Color[] = [
-  Color.rgb(...Array(3).fill(35)),
-  Color.rgb(...Array(3).fill(0)),
+const BACKGROUND_COLORS = [
+  35,
+  0,
 ];
-const PAINT_COLOR: Color = Color.rgb(...Array(3).fill(255));
+const PAINT_COLOR = 255;
 
 interface IProps {
   width?: number;
@@ -59,7 +59,7 @@ class Canvas {
       width: this.width,
     }) as HTMLCanvasElement;
 
-    this.pixels = Array(this.xPixels * this.yPixels).fill('rgba(0,0,0,0');
+    this.pixels = Array(this.xPixels * this.yPixels).fill(0);
 
     const ctx = this.canvas.getContext('2d');
 
@@ -93,7 +93,7 @@ class Canvas {
 
   getCanvasData = () => this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
-  drawPixel = ({ x, y }: IPoint, color:Color = PAINT_COLOR) => {
+  drawPixel = ({ x, y }: IPoint, color = PAINT_COLOR) => {
     x -= 10;
     y -= 10;
     if (x > this.canvas.width || y > this.canvas.height || x < 0 || y < 0) {
@@ -106,27 +106,39 @@ class Canvas {
     x = Math.floor(x / xPixelSize);
     y = Math.floor(y / yPixelSize);
 
-    for (let col = x - 1; col <= x + 1; col++) {
-      for (let row = y - 1; row <= y + 1; row++) {
-        let pixelColor;
-        if (row === y && col === x) {
-          pixelColor = color;
-        } else if (row === y || col === x) {
-          pixelColor = color.fade(0.5);
-        } else {
-          pixelColor = color.fade(0.8);
-        }
+    for (let row = y - 1; row <= y + 1; row++) {
+      for (let col = x - 1; col <= x + 1; col++) {
+        if (col >= 0 && row >= 0 && col < this.xPixels && row < this.yPixels) {
+          const index = (row * this.xPixels) + col;
+          let pixelColor = this.pixels[index];
+          if (row === y && col === x) {
+            pixelColor += color;
+          } else if (row === y || col === x) {
+            pixelColor += color * 0.2;
+          } else {
+            pixelColor += color * 0.1;
+          }
 
-        this.pixels[(row * this.canvas.width) + col] = pixelColor.toString();
-        this.drawRect(pixelColor, col, row);
+          if (pixelColor > 255) {
+            pixelColor = 255;
+          } else if (pixelColor < 0) {
+            pixelColor = 0;
+          }
+
+          this.pixels[index] = pixelColor;
+          this.drawRect(pixelColor, col, row);
+        }
       }
     }
   }
 
-  getPixels = () => this.pixels;
+  getPixels = () => this.pixels.map(pixel => {
+    const c = Color.rgb(pixel);
+    return c.red() * c.alpha();
+  });
 
-  drawRect = (color: Color, x: number, y: number, width: number = this.width / this.xPixels, height: number = this.height / this.yPixels) => {
-    this.ctx.fillStyle = color.toString();
+  drawRect = (color: number, x: number, y: number, width: number = this.width / this.xPixels, height: number = this.height / this.yPixels) => {
+    this.ctx.fillStyle = `rgba(${color}, ${color}, ${color}, 1)`;
     this.ctx.fillRect(x * width, y * height, width, height)
   }
 

@@ -1,7 +1,7 @@
 import Canvas from '../src';
 
-const pixels = 20;
-const pixelSize = 30;
+const pixels = 25;
+const pixelSize = 20;
 const size = pixelSize * pixels;
 
 const canvas = new Canvas({
@@ -11,7 +11,9 @@ const canvas = new Canvas({
   yPixels: pixels,
 });
 
-console.log(canvas.getPixels());
+setInterval(() => {
+  console.log(canvas.getPixels());
+}, 2000);
 
 const container = document.getElementById('canvas');
 while (container.firstChild) {
