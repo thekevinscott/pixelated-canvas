@@ -59,8 +59,6 @@ class Canvas {
       width: this.width,
     }) as HTMLCanvasElement;
 
-    this.pixels = Array(this.xPixels * this.yPixels).fill(0);
-
     const ctx = this.canvas.getContext('2d');
 
     if (ctx === null) {
@@ -71,7 +69,7 @@ class Canvas {
     this.canvas.onmousedown = this._onMouseDown;
     window.onmouseup = this._onMouseUp;
     this.canvas.onmousemove = this._onMouseMove;
-    this.drawBackground();
+    this.reset();
   }
 
   drawBackground = () => {
@@ -195,6 +193,7 @@ class Canvas {
   reset = () => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawBackground();
+    this.pixels = Array(this.xPixels * this.yPixels).fill(0);
   }
 }
 
