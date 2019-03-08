@@ -60,3 +60,5 @@ canvas.onMouseMove((e) => {
 ## License
 
 [MIT](LICENSE)
+
+![](https://ga-beacon.appspot.com/UA-112845439-4/pixelated-canvas/readme)
